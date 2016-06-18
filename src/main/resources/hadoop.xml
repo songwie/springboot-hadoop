@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/hadoop"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+	http://www.springframework.org/schema/hadoop http://www.springframework.org/schema/hadoop/spring-hadoop.xsd">
+
+    <configuration>
+	  fs.defaultFS=${hadoop.fs}
+	  yarn.resourcemanager.address=${hadoop.rm}
+	  mapreduce.framework.name=yarn
+	  yarn.app.mapreduce.client-am.ipc.max-retries=3
+	  mapreduce.app-submission.cross-platform=${hadoop.cross-platform}
+	  mapreduce.remote.os=Linux
+	  mapreduce.jobhistory.address=${hadoop.jh}
+	</configuration>
+	
+	<script id="setupScript" location="file:D:/mogoProject/Mogo_Dev/projects/hadoop/src/main/resources/copy-files.groovy">
+		<property name="localSourceFile" value="D:/localSourceFile"/>
+		<property name="inputDir" value="${hadoop.input.path}"/>
+		<property name="outputDir" value="${hadoop.output.path}"/>
+	</script>
+ 
+    <job id="demoJob"
+	     input-path="${hadoop.input.path}" 
+	     output-path="${hadoop.output.path}"
+	     libs="file:${hadoop.libs}/mogoroom-hadoop-*.jar"
+		 mapper="com.mogoroom.service.demo.MapReduceDemo.TempMapper"
+		 reducer="com.mogoroom.service.demo.MapReduceDemo.TempReducer"/>
+		 
+	<!-- pre-action="setupScript"	 --> 
+	<job-runner id="runner" run-at-startup="true" pre-action="setupScript" job-ref="demoJob" />
+	
+ 	<!-- <task:scheduler id="qbScheduler" pool-size="10"/>  
+	<task:scheduled-tasks>   
+        <task:scheduled ref="ScheduledTasks" method="reportCurrentTime" cron="0/3 * * * * ?"/>   
+    </task:scheduled-tasks> -->
+    
+</beans:beans>

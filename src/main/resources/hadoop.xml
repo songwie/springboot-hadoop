@@ -19,8 +19,8 @@
 	  mapreduce.jobhistory.address=${hadoop.jh}
 	</configuration>
 	
-	<script id="setupScript" location="file:D:/mogoProject/Mogo_Dev/projects/hadoop/src/main/resources/copy-files.groovy">
-		<property name="localSourceFile" value="D:/localSourceFile"/>
+	<script id="setupScript" location="classpath:/copy-files.groovy">
+		<property name="localSourceFile" value="classpath:/data/demo.txt"/>
 		<property name="inputDir" value="${hadoop.input.path}"/>
 		<property name="outputDir" value="${hadoop.output.path}"/>
 	</script>
@@ -28,11 +28,13 @@
     <job id="demoJob"
 	     input-path="${hadoop.input.path}" 
 	     output-path="${hadoop.output.path}"
-	     libs="file:${hadoop.libs}/mogoroom-hadoop-*.jar"
+	     libs="classpath:/"
 		 mapper="com.mogoroom.service.demo.MapReduceDemo.TempMapper"
 		 reducer="com.mogoroom.service.demo.MapReduceDemo.TempReducer"/>
 		 
-	<!-- pre-action="setupScript"	 --> 
+	<!-- pre-action="setupScript"
+	libs="file:${hadoop.libs}/mogoroom-hadoop-*.jar"
+    --> 
 	<job-runner id="runner" run-at-startup="true" pre-action="setupScript" job-ref="demoJob" />
 	
  	<!-- <task:scheduler id="qbScheduler" pool-size="10"/>  

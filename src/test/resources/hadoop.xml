@@ -9,7 +9,7 @@
 	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
 	http://www.springframework.org/schema/hadoop http://www.springframework.org/schema/hadoop/spring-hadoop.xsd">
 
-    <configuration>
+   <configuration>
 	  fs.defaultFS=${hadoop.defaultFS}
 	  yarn.resourcemanager.address=${hadoop.resourcemanager.address}
 	  yarn.resourcemanager.scheduler.address=${hadoop.scheduler.address}
@@ -21,28 +21,21 @@
 	</configuration>
 	
 	<job id="initJob" libs="classpath:/" />
- 
+	
     <!-- 测试使用 -->
- 
     <!-- <script id="renterSearchSetupScript" location="classpath:/copy-files.groovy">
 		<property name="localSourceFile" value="${hadoop.localSourceFile.renterSearch}"/>
 		<property name="inputDir" value="${hadoop.input.path}renterSearch"/>
 		<property name="outputDir" value="${hadoop.output.path}renterSearch}"/>
 	</script>
     <job id="renterSearchJob"
-	     input-path="/tmp/mogoroom/input/renterSearch/2016-06-24" 
-	     output-path="/tmp/mogoroom/output/renterSearch/2016-06-24"
+	     input-path="${hadoop.input.path}renterSearch" 
+	     output-path="${hadoop.output.path}renterSearch"
 	     libs="classpath:/"
 		 mapper="com.mogoroom.hadoop.service.renter.mapper.RenterSearchMapper"
 		 reducer="com.mogoroom.hadoop.service.renter.reducer.RenterSearchReducer"/> 
-	<job-runner id="testRenterSearchRunner" run-at-startup="true" pre-action="renterSearchSetupScript" job-ref="renterSearchJob" /> 
-	 -->
+		 
+	<job-runner id="testRenterSearchRunner" run-at-startup="ture" pre-action="renterSearchSetupScript" job-ref="renterSearchJob" /> 
+ -->
 	
- 	<task:scheduler id="qbScheduler" pool-size="10"/>  
-	<task:scheduled-tasks>   
-       <!--  <task:scheduled ref="ScheduledTasks" method="renterSearchTask" cron="0/5 * * * * ?"/>-->
-       <task:scheduled ref="ScheduledTasks" method="synHdfsToMysql" cron="0/5 * * * * ?"/>
-       <!-- <task:scheduled ref="ScheduledTasks" method="SumDayRenterSearchData" cron="0/5 * * * * ?"/>  -->
-    </task:scheduled-tasks>
-    
 </beans:beans>
